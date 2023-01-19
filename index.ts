@@ -5,7 +5,7 @@ import './style.css';
 const appDiv: HTMLElement = document.getElementById('app');
 appDiv.innerHTML = `<h1>TypeScript Starter</h1>`;
 
-const test_dict = "rip ripe prim prime impure premium mire";
+const test_dict = 'rip ripe prim prime impure premium mire';
 
 function make_hashmap(dict) {
   const x = {};
@@ -27,9 +27,9 @@ function remove_char_at_index(x: string, index: number) {
   return x.slice(0, index).concat(x.slice(index));
 }
 
-function find_connecting_words(x, indexed_dict) {
+function find_connecting_words(x, indexed_dict, index) {
   // remove a char from x
-  let sub_x = remove_char_at_index(x, 1);
+  let sub_x = remove_char_at_index(x, index);
   // does sub_x exist in indexed_dict?
   if (indexed_dict[sub_x]) {
     // keep going
@@ -41,13 +41,14 @@ function find_connecting_words(x, indexed_dict) {
 }
 
 function main(indexed_dict) {
-  const starters = Object.keys(indexed_dict).filter(x => x.length === 7);
+  const starters = Object.keys(indexed_dict).filter((x) => x.length === 7);
   let curr = starters.pop();
-  while(curr) {
-    find_connecting_words(curr, indexed_dict);
-
+  while (curr) {
+    find_connecting_words(curr, indexed_dict, 1);
+    console.log(curr);
     curr = starters.pop();
   }
 }
 
-main(hashmap);
+console.log('init');
+// main(hashmap);
