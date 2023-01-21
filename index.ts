@@ -14,6 +14,15 @@ fetch(longer_list)
   .then((res) => res.text())
   .then((res) => {
     const available_word_sets = main_2(res);
+    const max_sets = 100;
+    let n = max_sets;
+    let index = 0;
+    while (n > 0) {
+      const step = Math.floor(Math.random() * 100) + 10;
+      index += step;
+      display_set(available_word_sets[index]);
+      --n;
+    }
   })
   .catch((err) => {
     console.log(err);
@@ -125,12 +134,39 @@ function display_set(game_set) {
     set_thead_tr_el.appendChild(th);
   }
   const set_tbody_el = document.createElement('tbody');
-  const set_tbody_tr_el = document.createElement('tr');
+  const body_cols = [game_set.root, ...game_set.children];
+  // convert to rows
+  const body_rows = convert_to_rows(body_cols);
+  for (const row of body_rows) {
+    const set_tbody_tr_el = document.createElement('tr');
+    for (const col of row) {
+      const set_tbody_td_el = document.createElement('td');
+      set_tbody_td_el.innerHTML = typeof col !== 'undefined' ? col : '';
+      set_tbody_tr_el.appendChild(set_tbody_td_el);
+    }
+    set_tbody_el.appendChild(set_tbody_tr_el);
+  }
+
   set_thead_el.appendChild(set_thead_tr_el);
   set_table_el.appendChild(set_thead_el);
-  set_tbody_el.appendChild(set_tbody_tr_el);
   set_table_el.appendChild(set_tbody_el);
   appDiv.appendChild(set_table_el);
 }
 
-display_set();
+function convert_to_rows(cols) {
+  // rows should be
+  const rows = [];
+  for (let col = 0; col < cols.length; ++col) {
+    const list = cols[col];
+    // each index of list is a row
+    for (let row = 0; row < list.length; ++row) {
+      if (rows[row]) {
+        rows[row][col] = list[row];
+      } else {
+        rows[row] = [];
+        rows[row][col] = list[row];
+      }
+    }
+  }
+  return rows;
+}
