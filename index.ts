@@ -3,7 +3,7 @@ import './style.css';
 
 // Write TypeScript code!
 const appDiv: HTMLElement = document.getElementById('app');
-appDiv.innerHTML = `<h1>TypeScript Starter</h1>`;
+appDiv.innerHTML = `<h1>Available Word Sets</h1>`;
 
 const test_dict = 'rip ripe prim prime impure premium mire umpire obelisk';
 const longer_list =
@@ -13,7 +13,7 @@ const short_list =
 fetch(longer_list)
   .then((res) => res.text())
   .then((res) => {
-    main_2(res);
+    const available_word_sets = main_2(res);
   })
   .catch((err) => {
     console.log(err);
@@ -108,6 +108,29 @@ function main_2(text) {
       result.push(game_set);
     }
   }
+  return result;
 }
 
 main(hashmap);
+
+// render columns of words
+function display_set(game_set) {
+  const set_table_el = document.createElement('table');
+  const set_thead_el = document.createElement('thead');
+  const set_thead_tr_el = document.createElement('tr');
+  const cols = 5;
+  for (let i = 0; i < cols; ++i) {
+    const th = document.createElement('th');
+    th.innerHTML = 7 - i + '-letter';
+    set_thead_tr_el.appendChild(th);
+  }
+  const set_tbody_el = document.createElement('tbody');
+  const set_tbody_tr_el = document.createElement('tr');
+  set_thead_el.appendChild(set_thead_tr_el);
+  set_table_el.appendChild(set_thead_el);
+  set_tbody_el.appendChild(set_tbody_tr_el);
+  set_table_el.appendChild(set_tbody_el);
+  appDiv.appendChild(set_table_el);
+}
+
+display_set();
