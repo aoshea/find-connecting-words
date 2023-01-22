@@ -93,20 +93,36 @@ function main(indexed_dict, min_len) {
   let result = [];
   while (starters.length > 0) {
     let curr = starters.pop();
-    let game_set = [...indexed_dict[curr]];
+    // create root object
+    let curr_game_set_obj = {
+      key: curr,
+      values: indexed_dict[curr],
+      children: [],
+    };
+    let game_set = [curr_game_set_obj];
+
     // check all variants of curr minus one char at each index
     let stack = [];
     stack.push(...get_sub_words(curr));
     while (stack.length > 0) {
       let node = stack.pop();
+      // temporary game_set obj?
       if (indexed_dict[node]) {
+        const new_game_set_obj = {
+          key: node,
+          values: indexed_dict[node],
+          children: [],
+        };
+        curr_game_set_obj.children.push(new_game_set_obj);
         // yes, keep going, save result
-        game_set.push(...indexed_dict[node]);
         // push new ones to stack
         // if we're not already on the min length word
         if (node.length > min_len) {
+          curr_game_set_obj = new_game_set_obj;
           stack.push(...get_sub_words(node));
         }
+      } else {
+        // if this has no succ
       }
     }
 
